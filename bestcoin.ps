@@ -1,0 +1,24 @@
+$coins = $stream | sort-object { $stream.return.normalized_profit_nvidia } | Select-Object -first 2
+$best_coin_1 = $coins.return.current_mining_coin[0]
+$best_coin_2 = $coins.return.current_mining_coin[1]
+$best_coin_3 = $coins.return.current_mining_coin[2]
+$best_coin_4 = $coins.return.current_mining_coin[3]
+$profit_1 = $coins.return.normalized_profit_nvidia[0]
+$profit_2 = $coins.return.normalized_profit_nvidia[1]
+$profit_3 = $coins.return.normalized_profit_nvidia[2]
+$profit_4 = $coins.return.normalized_profit_nvidia[3]
+$algo_1 = $coins.return.algo[0]
+$algo_2 = $coins.return.algo[1]
+$algo_3 = $coins.return.algo[2]
+$algo_4 = $coins.return.algo[3]
+
+echo "bestcoin : $best_coin_1 - profit: $profit_1 - algo: $algo_1"
+echo "secondbestcoin : $best_coin_2 - profit: $profit_2 algo: $algo_2"
+echo "thirdbestcoin : $best_coin_3 - profit: $profit_3 algo: $algo_3"
+echo "fourthbestcoin : $best_coin_4 - profit: $profit_4 algo: $algo_4"
+$server = "europe.$algo_1-hub.miningpoolhub.com"
+if(!(Test-Connection -Cn $server -BufferSize 16 -Count 1 -ea 0 -quiet))
+
+  {
+  echo “Problem connecting to $server”
+  } else {echo "$server ok"}
