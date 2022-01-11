@@ -1,8 +1,13 @@
-$coins = $stream | sort-object { $stream.return.normalized_profit_nvidia } | Select-Object -first 2
-$best_coin_1 = $coins.return.current_mining_coin[0]
-$best_coin_2 = $coins.return.current_mining_coin[1]
-$best_coin_3 = $coins.return.current_mining_coin[2]
-$best_coin_4 = $coins.return.current_mining_coin[3]
+
+function BestCoinsNvidia {
+$URI = " http://miningpoolhub.com/index.php?page=api&action=getminingandprofitsstatistics&hardware=nvidia"
+$Result = Invoke-WebRequest $URI
+$coins = ConvertFrom-Json –InputObject $Result | sort-object { $_.return.normalized_profit_nvidia } | Select-Object -first 2
+
+$best_coin_1 = $coins.return.coin_name[0]
+$best_coin_2 = $coins.return.coin_name[1]
+$best_coin_3 = $coins.return.coin_name[2]
+$best_coin_4 = $coins.return.coin_name[3]
 $profit_1 = $coins.return.normalized_profit_nvidia[0]
 $profit_2 = $coins.return.normalized_profit_nvidia[1]
 $profit_3 = $coins.return.normalized_profit_nvidia[2]
@@ -16,9 +21,7 @@ echo "bestcoin : $best_coin_1 - profit: $profit_1 - algo: $algo_1"
 echo "secondbestcoin : $best_coin_2 - profit: $profit_2 algo: $algo_2"
 echo "thirdbestcoin : $best_coin_3 - profit: $profit_3 algo: $algo_3"
 echo "fourthbestcoin : $best_coin_4 - profit: $profit_4 algo: $algo_4"
-$server = "europe.$algo_1-hub.miningpoolhub.com"
-if(!(Test-Connection -Cn $server -BufferSize 16 -Count 1 -ea 0 -quiet))
 
-  {
-  echo “Problem connecting to $server”
-  } else {echo "$server ok"}
+Invoke-Expression "& `"C:\ccminer\$algo_1$algo_2.bat`""
+}
+BestCoinsNvidia
